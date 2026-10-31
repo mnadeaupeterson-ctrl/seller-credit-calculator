@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seller Credit &amp; Buydown Calculator · Molly Nadeau° Team</title>
+<style>
+:root{--charcoal:#2B2B2B;--cream:#F0ECE1;--gold:#C9A24B;--stone:#8A8272;--white:#fff}
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,"Times New Roman",serif;background:var(--cream);color:var(--charcoal);line-height:1.4}
+h1,h2,h3,.sans,label,button,input,select,table{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+header{background:var(--charcoal);color:var(--cream);padding:16px}
+.wrap{max-width:980px;margin:0 auto}
+.head{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{flex:1;min-width:220px}
+.logo{display:inline-block;text-align:center;font-family:Georgia,"Times New Roman",serif}
+.wm{font-size:clamp(22px,6.2vw,34px);letter-spacing:.14em;color:var(--cream);line-height:1.1;white-space:nowrap}
+.wm sup{color:var(--gold);font-size:.45em;letter-spacing:0;vertical-align:top;position:relative;top:.1em;margin-left:.1em}
+.tm{color:var(--gold);font-size:clamp(10px,2.6vw,13px);letter-spacing:.5em;margin-top:2px;padding-left:.5em}
+.sub{font-family:-apple-system,"Segoe UI",Arial,sans-serif;font-size:12px;color:var(--stone);margin-top:8px}
+.headshot{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
+h1{font-size:22px;margin:0;padding:14px 16px 0;color:var(--charcoal)}
+main{padding:12px 16px 24px}
+.card{background:var(--white);border-radius:10px;padding:16px;margin:14px 0;border-top:3px solid var(--gold);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.card h2{margin:0 0 10px;font-size:17px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+label{display:block;font-size:12px;color:var(--stone);text-transform:uppercase;letter-spacing:.04em}
+input,select{width:100%;padding:10px;margin-top:4px;font-size:16px;border:1px solid var(--stone);border-radius:6px;background:var(--white);color:var(--charcoal)}
+input[type=range]{padding:0;accent-color:var(--gold)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chip{border:1px solid var(--charcoal);background:var(--white);color:var(--charcoal);border-radius:999px;padding:8px 14px;font-size:14px;cursor:pointer}
+.chip.on{background:var(--charcoal);color:var(--cream);border-color:var(--charcoal)}
+.chip b{color:var(--gold)}
+.note{font-size:12px;color:var(--stone)}
+.banner{padding:8px 12px;border-radius:6px;font-size:13px;margin-bottom:6px}
+.banner.live{background:var(--cream);border-left:4px solid var(--gold)}
+.banner.sample{background:#fff4d6;border-left:4px solid var(--gold)}
+.warn{background:#fdeaea;border-left:4px solid #b3261e;color:#7a1712;padding:10px 12px;border-radius:6px;margin-top:10px;font-size:14px;display:none}
+.info{background:var(--cream);border-left:4px solid var(--stone);padding:10px 12px;border-radius:6px;margin-top:10px;font-size:14px;display:none}
+.kv{display:grid;grid-template-columns:1fr auto;gap:6px 12px;font-family:-apple-system,"Segoe UI",Arial,sans-serif;font-size:15px}
+.kv span:nth-child(even){text-align:right;font-weight:600}
+.pos{color:#2e6b34}.neg{color:#b3261e}
+.seg{display:flex;gap:6px;margin-bottom:10px}
+.seg button{flex:1;padding:9px;border:1px solid var(--charcoal);background:var(--white);border-radius:6px;font-size:14px;cursor:pointer}
+.seg button.on{background:var(--charcoal);color:var(--cream)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px;text-align:right;border-bottom:1px solid var(--cream);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{background:var(--charcoal);color:var(--cream);font-weight:600}
+td.best{background:#f6ecd0;font-weight:700}
+th.best{background:var(--gold);color:var(--charcoal)}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{flex:1;min-width:150px;text-align:center;padding:13px;border-radius:8px;border:0;font-size:16px;font-weight:600;cursor:pointer;text-decoration:none}
+.btn.primary{background:var(--charcoal);color:var(--cream)}
+.btn.alt{background:var(--white);color:var(--charcoal);border:2px solid var(--charcoal)}
+.contact{font-size:14px;margin-top:10px}
+footer{background:var(--charcoal);color:var(--cream);padding:18px 16px;font-size:12px;font-family:-apple-system,Arial,sans-serif}
+footer p{margin:6px 0;color:#d8d3c5}
+footer .eho{color:var(--gold)}
+#sampleEdit{display:none;margin-top:8px}
+</style>
+</head>
+<body>
+<header><div class="wrap head">
+  <div class="brand">
+    <div class="logo" role="img" aria-label="Molly Nadeau Team">
+      <div class="wm">MOLLY NADEAU<sup>°</sup></div>
+      <div class="tm">TEAM</div>
+    </div>
+    <div class="sub">Molly Nadeau, Sr. Loan Officer<br>Neighborhood Loans</div>
+  </div>
+  <img class="headshot" src="assets/headshot.jpg" alt="Molly Nadeau" onerror="this.style.display='none'">
+</div></header>
+
+<div class="wrap">
+<h1>Seller Credit &amp; Buydown Calculator</h1>
+<main>
+  <div class="card">
+    <h2>Today's rates</h2>
+    <div id="rateBanner" class="banner sample">Loading rates…</div>
+    <div class="chips" id="chips"></div>
+    <div id="sampleEdit" class="grid"></div>
+  </div>
+
+  <div class="card">
+    <h2>Scenario</h2>
+    <div class="grid">
+      <div><label for="price">Sales price ($)</label><input id="price" type="number" inputmode="decimal" value="400000"></div>
+      <div><label for="dp">Down payment (%)</label><input id="dp" type="number" inputmode="decimal" step="0.5" value="5"></div>
+      <div><label for="rate">Note rate (%)</label><input id="rate" type="number" inputmode="decimal" step="0.125" value="6.75"></div>
+      <div><label for="type">Loan type</label><select id="type"><option>Conventional</option><option>FHA</option><option>VA</option><option>Jumbo</option></select></div>
+      <div><label for="use">Property use</label><select id="use"><option>Primary</option><option>Second home</option><option>Investment</option></select></div>
+      <div><label for="term">Loan term</label><select id="term"><option value="30">30 years</option><option value="15">15 years</option></select></div>
+      <div><label for="cc">Est. closing costs (%)</label><input id="cc" type="number" inputmode="decimal" step="0.25" value="3"></div>
+      <div><label for="ppt">Rate drop per point (%)</label><input id="ppt" type="number" inputmode="decimal" step="0.05" value="0.25"></div>
+    </div>
+    <div class="grid" style="margin-top:12px">
+      <div><label for="credit">Seller credit ($)</label><input id="credit" type="number" inputmode="decimal" value="8000"></div>
+      <div><label for="slider">Adjust credit</label><input id="slider" type="range" min="0" max="30000" step="250" value="8000"></div>
+    </div>
+    <div id="limit" class="info"></div>
+    <div id="warn" class="warn"></div>
+    <p class="note">Rate-per-point assumption is editable above (default: 1 point ≈ 0.25%, rounded to the nearest 0.125%).</p>
+  </div>
+
+  <div class="card">
+    <h2>1 · Price reduction</h2>
+    <div class="kv" id="o1"></div>
+  </div>
+
+  <div class="card">
+    <h2>2 · Temporary buydown</h2>
+    <div class="seg" id="bdSeg">
+      <button data-v="1-0">1-0</button><button data-v="2-1" class="on">2-1</button><button data-v="3-2-1">3-2-1</button>
+    </div>
+    <div class="kv" id="o2"></div>
+    <div class="tw" style="margin-top:12px"><table id="schedule"></table></div>
+  </div>
+
+  <div class="card">
+    <h2>3 · Permanent rate buydown</h2>
+    <div class="kv" id="o3"></div>
+  </div>
+
+  <div class="card">
+    <h2>Side-by-side</h2>
+    <div class="tw"><table id="cmp"></table></div>
+    <p class="note">Highlighted column = most 5-year payment savings. "Credit left" is what remains of the seller credit for closing costs (negative = still needed).</p>
+  </div>
+
+  <div class="card">
+    <h2>Talk it through</h2>
+    <div class="actions">
+      <a class="btn primary" id="textBtn" href="#">Text Molly</a>
+      <button class="btn alt" id="copyBtn" type="button">Copy summary</button>
+    </div>
+    <div class="contact">Molly Nadeau · <a href="tel:+17632867842">763-286-7842</a> · <a href="mailto:mollyn@neighborhoodloans.com">mollyn@neighborhoodloans.com</a></div>
+    <div id="copied" class="note"></div>
+  </div>
+</main>
+</div>
+
+<footer><div class="wrap">
+  <p>This calculator is for illustration only. It is not a rate quote, loan approval, or commitment to lend. Figures show principal and interest only and exclude taxes, insurance, mortgage insurance, HOA and other costs. Rates shown are from Mortgage News Daily's index (or editable sample rates when labeled) and are not offered rates; actual rates, terms, and seller concession limits depend on credit, loan program, and investor guidelines. Subject to underwriting approval.</p>
+  <p><span class="eho">⌂ Equal Housing Opportunity.</span></p>
+  <p>Molly Nadeau, Sr. Loan Officer, NMLS #308436 · MOLLY NADEAU° TEAM · Neighborhood Loans, NMLS #222982</p>
+</div></footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const fmt = n => (n < 0 ? "-" : "") + "$" + Math.abs(Math.round(n)).toLocaleString("en-US");
+const num = id => parseFloat($(id).value) || 0;
+const NMLS_PHONE = "+17632867842";
+const SAMPLE = { fixed30: 6.75, fixed15: 6.00, fha: 6.50, va: 6.25, jumbo: 6.95 };
+const CHIPS = [
+  ["fixed30", "30-yr Fixed", "Conventional", "30"],
+  ["fixed15", "15-yr Fixed", "Conventional", "15"],
+  ["fha", "FHA", "FHA", "30"],
+  ["va", "VA", "VA", "30"],
+  ["jumbo", "Jumbo", "Jumbo", "30"],
+];
+let rates = { ...SAMPLE }, live = false, activeChip = "fixed30", bd = "2-1", lastSummary = "";
+
+function pmt(loan, ratePct, years) {
+  const n = years * 12, r = ratePct / 100 / 12;
+  if (loan <= 0) return 0;
+  return r === 0 ? loan / n : loan * r / (1 - Math.pow(1 + r, -n));
+}
+
+function chipKeyFor() {
+  const t = $("type").value, term = $("term").value;
+  if (t === "FHA") return "fha";
+  if (t === "VA") return "va";
+  if (t === "Jumbo") return "jumbo";
+  return term === "15" ? "fixed15" : "fixed30";
+}
+
+function renderChips() {
+  $("chips").innerHTML = CHIPS.map(([k, label]) =>
+    `<button type="button" class="chip ${k === activeChip ? "on" : ""}" data-k="${k}">${label} <b>${rates[k] != null ? rates[k].toFixed(3).replace(/0$/, "") + "%" : "—"}</b></button>`).join("");
+  document.querySelectorAll(".chip").forEach(b => b.onclick = () => {
+    const c = CHIPS.find(x => x[0] === b.dataset.k);
+    $("type").value = c[2]; $("term").value = c[3];
+    activeChip = c[0]; $("rate").value = rates[c[0]]; renderChips(); calc();
+  });
+}
+
+function renderSampleEdit() {
+  const box = $("sampleEdit");
+  box.style.display = live ? "none" : "grid";
+  box.innerHTML = CHIPS.map(([k, label]) => `<div><label>${label} sample %</label><input type="number" step="0.125" data-s="${k}" value="${rates[k]}"></div>`).join("");
+  box.querySelectorAll("input").forEach(i => i.oninput = () => {
+    rates[i.dataset.s] = parseFloat(i.value) || 0;
+    if (i.dataset.s === activeChip) $("rate").value = rates[activeChip];
+    renderChips(); calc();
+  });
+}
+
+async function loadRates() {
+  try {
+    const r = await fetch("/.netlify/functions/mnd-rates");
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error);
+    for (const k in SAMPLE) if (j.rates[k] != null) rates[k] = j.rates[k];
+    live = true;
+    $("rateBanner").className = "banner live";
+    $("rateBanner").textContent = "Live rates from Mortgage News Daily" + (j.date ? " · updated " + j.date : "") + ". Tap a rate to use it, or type your own.";
+  } catch (e) {
+    live = false;
+    $("rateBanner").className = "banner sample";
+    $("rateBanner").textContent = "Live rates unavailable. Showing SAMPLE rates (not today's market). Edit them below.";
+  }
+  activeChip = chipKeyFor();
+  $("rate").value = rates[activeChip];
+  renderChips(); renderSampleEdit(); calc();
+}
+
+function limitInfo(price, dpPct) {
+  const t = $("type").value, use = $("use").value;
+  if (t === "Jumbo") return { pct: null, text: "Jumbo: seller concession limits vary by investor." };
+  if (t === "VA") return { pct: null, text: "VA: no cap on seller credit (concessions are limited by VA rules for certain items; confirm with Molly)." };
+  if (t === "FHA") return { pct: 6, text: "FHA limit: 6% of price." };
+  if (use === "Investment") return { pct: 2, text: "Conventional investment property limit: 2% of price." };
+  const p = dpPct < 10 ? 3 : dpPct < 25 ? 6 : 9;
+  return { pct: p, text: `Conventional limit at ${dpPct}% down: ${p}% of price.` };
+}
+
+function calc() {
+  const price = num("price"), dpPct = num("dp"), rate = num("rate"), years = +$("term").value;
+  const ccPct = num("cc"), credit = num("credit"), step = num("ppt") || 0.25;
+  const loan = price * (1 - dpPct / 100);
+  const base = pmt(loan, rate, years);
+  const closing = price * ccPct / 100;
+
+  // limit
+  const L = limitInfo(price, dpPct);
+  $("limit").style.display = "block"; $("limit").textContent = L.text;
+  const w = $("warn");
+  if (L.pct != null && credit > price * L.pct / 100) {
+    w.style.display = "block";
+    w.textContent = `Warning: ${fmt(credit)} (${(credit / price * 100).toFixed(2)}%) exceeds the ${L.pct}% limit of ${fmt(price * L.pct / 100)}.`;
+  } else w.style.display = "none";
+
+  // 1 price reduction
+  const np = price - credit, nl = np * (1 - dpPct / 100), npay = pmt(nl, rate, years), save1 = base - npay;
+  $("o1").innerHTML = row("New price", fmt(np)) + row("New loan amount", fmt(nl)) + row("New payment (P&I)", fmt(npay)) + row("Monthly savings", fmt(save1), "pos");
+
+  // 2 temporary buydown
+  const cuts = bd === "1-0" ? [1] : bd === "2-1" ? [2, 1] : [3, 2, 1];
+  let cost2 = 0, total2 = 0;
+  const sched = cuts.map((c, i) => {
+    const p = pmt(loan, Math.max(rate - c, 0), years), s = base - p;
+    cost2 += s * 12; total2 += s * 12;
+    return { yr: i + 1, rate: Math.max(rate - c, 0), pay: p, sav: s };
+  });
+  const left2 = credit - cost2, y1 = sched[0].pay;
+  $("o2").innerHTML = row("Buydown cost", fmt(cost2)) + row("Year-1 payment", fmt(y1)) + row("Year-1 monthly savings", fmt(base - y1), "pos") +
+    row(left2 >= 0 ? "Credit left for closing costs" : "Credit still needed", fmt(Math.abs(left2)), left2 >= 0 ? "pos" : "neg");
+  let t = `<tr><th>Year</th><th>Rate</th><th>Payment</th><th>Savings/mo</th></tr>`;
+  sched.forEach(s => t += `<tr><td>Year ${s.yr}</td><td>${s.rate.toFixed(3)}%</td><td>${fmt(s.pay)}</td><td>${fmt(s.sav)}</td></tr>`);
+  t += `<tr><td>Year ${cuts.length + 1}+</td><td>${rate.toFixed(3)}%</td><td>${fmt(base)}</td><td>$0</td></tr>`;
+  $("schedule").innerHTML = t;
+
+  // 3 permanent buydown
+  const pts = loan > 0 ? credit / (loan * 0.01) : 0;
+  const drop = Math.min(Math.round(pts * step / 0.125) * 0.125, rate);
+  const cost3 = loan * 0.01 * (drop / step), nrate = rate - drop, p3 = pmt(loan, nrate, years), save3 = base - p3, left3 = credit - cost3;
+  $("o3").innerHTML = row("Points purchased", (drop / step).toFixed(2)) + row("New rate", nrate.toFixed(3) + "%") + row("New payment (P&I)", fmt(p3)) +
+    row("Monthly savings", fmt(save3), "pos") + row("Cost", fmt(cost3)) +
+    row(left3 >= 0 ? "Credit left for closing costs" : "Credit still needed", fmt(Math.abs(left3)), left3 >= 0 ? "pos" : "neg");
+
+  // comparison
+  const opts = [
+    { n: "Price reduction", y1: npay, after: npay, s5: save1 * 60, left: credit - 0 - 0 },
+    { n: `Temp buydown ${bd}`, y1, after: base, s5: sched.reduce((a, s) => a + s.sav * 12, 0), left: left2 },
+    { n: "Permanent buydown", y1: p3, after: p3, s5: save3 * 60, left: left3 },
+  ];
+  // price reduction uses the credit entirely; nothing left for closing costs
+  opts[0].left = 0;
+  const best = opts.reduce((b, o, i) => o.s5 > opts[b].s5 ? i : b, 0);
+  const hc = i => i === best ? " best" : "";
+  $("cmp").innerHTML = `<tr><th></th>${opts.map((o, i) => `<th class="${hc(i).trim()}">${o.n}</th>`).join("")}</tr>` +
+    cmpRow("Year-1 payment", opts.map(o => fmt(o.y1)), best) +
+    cmpRow("Payment after buydown", opts.map(o => fmt(o.after)), best) +
+    cmpRow("5-year payment savings", opts.map(o => fmt(o.s5)), best) +
+    cmpRow("Credit left for closing costs", opts.map(o => fmt(o.left)), best);
+
+  // summary
+  lastSummary = `Seller credit scenario — ${fmt(price)} price, ${dpPct}% down, ${rate}% ${$("type").value} ${years}-yr (${$("use").value}). ` +
+    `Credit ${fmt(credit)}. Base P&I ${fmt(base)}. ` +
+    `Price reduction: ${fmt(npay)}/mo (save ${fmt(save1)}/mo). ` +
+    `${bd} buydown: yr-1 ${fmt(y1)}, cost ${fmt(cost2)}, ${left2 >= 0 ? "left" : "needed"} ${fmt(Math.abs(left2))}. ` +
+    `Permanent: ${nrate.toFixed(3)}%, ${fmt(p3)}/mo, cost ${fmt(cost3)}. ` +
+    `Best 5-yr savings: ${opts[best].n} (${fmt(opts[best].s5)}). Est. closing costs ${fmt(closing)}.`;
+  $("textBtn").href = `sms:${NMLS_PHONE}?&body=${encodeURIComponent("Hi Molly, " + lastSummary)}`;
+}
+
+const row = (a, b, c = "") => `<span>${a}</span><span class="${c}">${b}</span>`;
+const cmpRow = (label, vals, best) => `<tr><td>${label}</td>${vals.map((v, i) => `<td class="${i === best ? "best" : ""}">${v}</td>`).join("")}</tr>`;
+
+["price", "dp", "cc", "ppt", "use", "rate"].forEach(id => $(id).addEventListener("input", calc));
+["type", "term"].forEach(id => $(id).addEventListener("change", () => {
+  activeChip = chipKeyFor(); $("rate").value = rates[activeChip]; renderChips(); calc();
+}));
+$("credit").addEventListener("input", () => { $("slider").value = $("credit").value; calc(); });
+$("slider").addEventListener("input", () => { $("credit").value = $("slider").value; calc(); });
+$("price").addEventListener("input", () => { $("slider").max = Math.max(10000, Math.round(num("price") * 0.1 / 1000) * 1000); });
+document.querySelectorAll("#bdSeg button").forEach(b => b.onclick = () => {
+  bd = b.dataset.v; document.querySelectorAll("#bdSeg button").forEach(x => x.classList.toggle("on", x === b)); calc();
+});
+$("copyBtn").onclick = async () => {
+  try { await navigator.clipboard.writeText(lastSummary); $("copied").textContent = "Summary copied."; }
+  catch (e) { prompt("Copy this summary:", lastSummary); }
+};
+$("slider").max = 40000;
+renderChips(); calc(); loadRates();
+</script>
+</body>
+</html>
